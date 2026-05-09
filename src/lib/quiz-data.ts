@@ -95,8 +95,17 @@ export const DEMO_QUIZZES: Quiz[] = [
   },
 ];
 
+// In-memory store for custom quizzes (would be a database in production)
+const customQuizzes: Map<string, Quiz> = new Map();
+
 export function findQuizByPin(pin: string): Quiz | undefined {
-  return DEMO_QUIZZES.find((q) => q.pin === pin.trim());
+  const cleaned = pin.trim();
+  // Check custom quizzes first, then demo quizzes
+  return customQuizzes.get(cleaned) || DEMO_QUIZZES.find((q) => q.pin === cleaned);
+}
+
+export function storeCustomQuiz(quiz: Quiz) {
+  customQuizzes.set(quiz.pin, quiz);
 }
 
 export const BOT_NAMES = [

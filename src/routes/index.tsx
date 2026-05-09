@@ -1,15 +1,12 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useState } from "react";
-import { createSession } from "@/lib/game-store";
-import { AVATARS } from "@/lib/avatars";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "QuizBlast — Live Multiplayer Quiz" },
-      { name: "description", content: "Join a live quiz with a game PIN. Answer fast, climb the leaderboard." },
+      { name: "description", content: "Create or join a live quiz. Answer fast, climb the leaderboard." },
       { property: "og:title", content: "QuizBlast — Live Multiplayer Quiz" },
-      { property: "og:description", content: "Join a live quiz with a game PIN." },
+      { property: "og:description", content: "Create or join a live quiz." },
     ],
   }),
   component: Home,
@@ -17,21 +14,6 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const navigate = useNavigate();
-  const [pin, setPin] = useState("");
-  const [nickname, setNickname] = useState("");
-  const [avatar, setAvatar] = useState(AVATARS[0].id);
-  const [error, setError] = useState<string | null>(null);
-
-  function handleJoin(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-    const result = createSession(pin, nickname, avatar);
-    if ("error" in result) {
-      setError(result.error);
-      return;
-    }
-    navigate({ to: "/lobby" });
-  }
 
   return (
     <main className="min-h-screen flex flex-col">
@@ -42,109 +24,82 @@ function Home() {
           </div>
           <span className="font-extrabold text-xl tracking-tight">QuizBlast</span>
         </Link>
-        <a href="#how" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-          How it works
-        </a>
       </header>
 
-      <section className="flex-1 grid lg:grid-cols-2 gap-10 items-center px-6 pb-16 max-w-6xl mx-auto w-full">
-        <div className="space-y-6">
-          <h1 className="text-5xl sm:text-6xl font-black leading-[1.05]">
-            Play live quizzes.{" "}
-            <span className="bg-clip-text text-transparent" style={{ backgroundImage: "var(--gradient-hero)" }}>
-              Climb the board.
-            </span>
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-md">
-            Enter a game PIN, pick a nickname and avatar, and battle for the top spot.
-            Every second counts — faster answers earn more points.
-          </p>
-          <div id="how" className="grid sm:grid-cols-3 gap-3 pt-2">
-            {[
-              { n: "1", t: "Enter PIN", d: "Try 123456 or 654321" },
-              { n: "2", t: "Pick avatar", d: "Choose your character" },
-              { n: "3", t: "Play & win", d: "Fast = more points" },
-            ].map((s) => (
-              <div key={s.n} className="rounded-xl p-4 bg-card/60 border border-border">
-                <div className="size-7 rounded-md bg-primary/30 text-primary-foreground font-bold grid place-items-center text-sm">
-                  {s.n}
-                </div>
-                <div className="mt-2 font-bold">{s.t}</div>
-                <div className="text-xs text-muted-foreground">{s.d}</div>
-              </div>
-            ))}
+      <section className="flex-1 flex items-center justify-center px-6 pb-16">
+        <div className="space-y-12 max-w-4xl w-full">
+          <div className="text-center space-y-4">
+            <h1 className="text-5xl sm:text-6xl font-black leading-[1.05]">
+              Live Quizzes.{" "}
+              <span className="bg-clip-text text-transparent" style={{ backgroundImage: "var(--gradient-hero)" }}>
+                Real Time.
+              </span>
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-xl mx-auto">
+              Create a quiz and challenge your friends, or join a game and compete on the leaderboard.
+              Fast answers earn more points.
+            </p>
           </div>
-        </div>
 
-        <form
-          onSubmit={handleJoin}
-          className="rounded-3xl p-6 sm:p-8 border border-border space-y-4"
-          style={{ backgroundImage: "var(--gradient-card)", boxShadow: "var(--shadow-glow)" }}
-        >
-          <h2 className="text-2xl font-extrabold">Join a game</h2>
-          <div className="space-y-2">
-            <label htmlFor="pin" className="text-sm font-semibold text-muted-foreground">
-              Game PIN
-            </label>
-            <input
-              id="pin"
-              inputMode="numeric"
-              value={pin}
-              onChange={(e) => setPin(e.target.value)}
-              placeholder="123456"
-              className="w-full text-center text-3xl tracking-[0.5em] font-black bg-input text-background rounded-xl py-4 outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              maxLength={8}
-              autoFocus
-            />
+          <div className="grid sm:grid-cols-2 gap-6">
+            {/* Create a Game Card */}
+            <button
+              onClick={() => navigate({ to: "/create" })}
+              className="group rounded-3xl p-8 border border-border overflow-hidden transition-all hover:border-primary hover:shadow-xl"
+              style={{ backgroundImage: "var(--gradient-card)", boxShadow: "var(--shadow-glow)" }}
+            >
+              <div className="space-y-4">
+                <div className="size-16 rounded-2xl bg-gradient-to-br from-purple-500 to-blue-500 text-white grid place-items-center font-black text-2xl group-hover:scale-110 transition-transform">
+                  +
+                </div>
+                <div>
+                  <h2 className="text-2xl font-extrabold text-left">Create a Game</h2>
+                  <p className="text-muted-foreground text-sm mt-2 text-left">
+                    Set up your questions, get a PIN, and invite players. You control the pace.
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 text-primary font-semibold text-sm group-hover:gap-3 transition-all">
+                  <span>Get started</span>
+                  <span>→</span>
+                </div>
+              </div>
+            </button>
+
+            {/* Join a Game Card */}
+            <button
+              onClick={() => navigate({ to: "/join" })}
+              className="group rounded-3xl p-8 border border-border overflow-hidden transition-all hover:border-primary hover:shadow-xl"
+              style={{ backgroundImage: "var(--gradient-card)", boxShadow: "var(--shadow-glow)" }}
+            >
+              <div className="space-y-4">
+                <div className="size-16 rounded-2xl bg-gradient-to-br from-green-500 to-teal-500 text-white grid place-items-center font-black text-2xl group-hover:scale-110 transition-transform">
+                  ✓
+                </div>
+                <div>
+                  <h2 className="text-2xl font-extrabold text-left">Join a Game</h2>
+                  <p className="text-muted-foreground text-sm mt-2 text-left">
+                    Enter a game PIN, pick your avatar, and compete. Answer fast, earn more points.
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 text-primary font-semibold text-sm group-hover:gap-3 transition-all">
+                  <span>Join now</span>
+                  <span>→</span>
+                </div>
+              </div>
+            </button>
           </div>
-          <div className="space-y-2">
-            <label htmlFor="name" className="text-sm font-semibold text-muted-foreground">
-              Nickname
-            </label>
-            <input
-              id="name"
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
-              placeholder="e.g. RocketRabbit"
-              className="w-full bg-input text-background rounded-xl py-3 px-4 outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              maxLength={16}
-            />
-          </div>
-          <div className="space-y-2">
-            <span className="text-sm font-semibold text-muted-foreground">Pick your avatar</span>
-            <div className="grid grid-cols-6 gap-2">
-              {AVATARS.map((a) => (
-                <button
-                  type="button"
-                  key={a.id}
-                  onClick={() => setAvatar(a.id)}
-                  aria-label={a.label}
-                  className={`aspect-square rounded-xl text-2xl grid place-items-center transition-all ${
-                    avatar === a.id
-                      ? "bg-primary ring-4 ring-primary-foreground scale-110"
-                      : "bg-secondary hover:bg-secondary/70"
-                  }`}
-                >
-                  {a.emoji}
-                </button>
-              ))}
+
+          <div className="grid sm:grid-cols-2 gap-4 text-center text-sm text-muted-foreground pt-6">
+            <div className="rounded-xl p-4 bg-card/60 border border-border">
+              <div className="font-semibold text-foreground mb-1">No sign-up</div>
+              <div>Just pick a nickname and start playing</div>
+            </div>
+            <div className="rounded-xl p-4 bg-card/60 border border-border">
+              <div className="font-semibold text-foreground mb-1">Real-time leaderboard</div>
+              <div>See scores update instantly as players answer</div>
             </div>
           </div>
-          {error && (
-            <p className="text-sm text-destructive font-medium" role="alert">
-              {error}
-            </p>
-          )}
-          <button
-            type="submit"
-            className="w-full btn-pop btn-pop-active rounded-xl bg-primary text-primary-foreground font-extrabold text-lg py-4 hover:brightness-110"
-          >
-            Enter game →
-          </button>
-          <p className="text-xs text-muted-foreground text-center">
-            Demo PINs: <span className="font-semibold text-foreground">123456</span> · <span className="font-semibold text-foreground">654321</span>
-          </p>
-        </form>
+        </div>
       </section>
     </main>
   );
