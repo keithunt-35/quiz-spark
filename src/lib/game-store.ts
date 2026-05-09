@@ -110,10 +110,6 @@ export function createCustomGame(
 export function createSession(pin: string, nickname: string, avatar: string): { quiz: Quiz; session: GameSession } | { error: string } {
   return joinGame(pin, nickname, avatar);
 }
-  };
-  saveSession(session);
-  return { quiz, session };
-}
 
 export function scoreAnswer(timeLeft: number, totalTime: number): number {
   // Kahoot-like: faster = more points, max 1000.
