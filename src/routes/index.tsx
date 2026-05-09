@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { createSession } from "@/lib/game-store";
+import { AVATARS } from "@/lib/avatars";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -18,12 +19,13 @@ function Home() {
   const navigate = useNavigate();
   const [pin, setPin] = useState("");
   const [nickname, setNickname] = useState("");
+  const [avatar, setAvatar] = useState(AVATARS[0].id);
   const [error, setError] = useState<string | null>(null);
 
   function handleJoin(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    const result = createSession(pin, nickname);
+    const result = createSession(pin, nickname, avatar);
     if ("error" in result) {
       setError(result.error);
       return;
@@ -40,10 +42,7 @@ function Home() {
           </div>
           <span className="font-extrabold text-xl tracking-tight">QuizBlast</span>
         </Link>
-        <a
-          href="#how"
-          className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-        >
+        <a href="#how" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
           How it works
         </a>
       </header>
@@ -57,17 +56,17 @@ function Home() {
             </span>
           </h1>
           <p className="text-lg text-muted-foreground max-w-md">
-            Enter a game PIN, pick a nickname, and battle for the top spot. Every second
-            counts — faster answers earn more points.
+            Enter a game PIN, pick a nickname and avatar, and battle for the top spot.
+            Every second counts — faster answers earn more points.
           </p>
           <div id="how" className="grid sm:grid-cols-3 gap-3 pt-2">
             {[
               { n: "1", t: "Enter PIN", d: "Try 123456 or 654321" },
-              { n: "2", t: "Pick name", d: "Your alias on the board" },
+              { n: "2", t: "Pick avatar", d: "Choose your character" },
               { n: "3", t: "Play & win", d: "Fast = more points" },
             ].map((s) => (
               <div key={s.n} className="rounded-xl p-4 bg-card/60 border border-border">
-                <div className="size-7 rounded-md bg-primary/20 text-primary font-bold grid place-items-center text-sm">
+                <div className="size-7 rounded-md bg-primary/30 text-primary-foreground font-bold grid place-items-center text-sm">
                   {s.n}
                 </div>
                 <div className="mt-2 font-bold">{s.t}</div>
@@ -93,7 +92,7 @@ function Home() {
               value={pin}
               onChange={(e) => setPin(e.target.value)}
               placeholder="123456"
-              className="w-full text-center text-3xl tracking-[0.5em] font-black bg-input rounded-xl py-4 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="w-full text-center text-3xl tracking-[0.5em] font-black bg-input text-background rounded-xl py-4 outline-none focus-visible:ring-2 focus-visible:ring-ring"
               maxLength={8}
               autoFocus
             />
@@ -107,9 +106,29 @@ function Home() {
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
               placeholder="e.g. RocketRabbit"
-              className="w-full bg-input rounded-xl py-3 px-4 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="w-full bg-input text-background rounded-xl py-3 px-4 outline-none focus-visible:ring-2 focus-visible:ring-ring"
               maxLength={16}
             />
+          </div>
+          <div className="space-y-2">
+            <span className="text-sm font-semibold text-muted-foreground">Pick your avatar</span>
+            <div className="grid grid-cols-6 gap-2">
+              {AVATARS.map((a) => (
+                <button
+                  type="button"
+                  key={a.id}
+                  onClick={() => setAvatar(a.id)}
+                  aria-label={a.label}
+                  className={`aspect-square rounded-xl text-2xl grid place-items-center transition-all ${
+                    avatar === a.id
+                      ? "bg-primary ring-4 ring-primary-foreground scale-110"
+                      : "bg-secondary hover:bg-secondary/70"
+                  }`}
+                >
+                  {a.emoji}
+                </button>
+              ))}
+            </div>
           </div>
           {error && (
             <p className="text-sm text-destructive font-medium" role="alert">
