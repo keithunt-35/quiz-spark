@@ -1,6 +1,7 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { loadSession, clearSession, type Player } from "@/lib/game-store";
+import { loadSession, type Player } from "@/lib/game-store";
+import { getAvatar } from "@/lib/avatars";
 
 export const Route = createFileRoute("/results")({
   head: () => ({ meta: [{ title: "Results — QuizBlast" }] }),
@@ -28,61 +29,60 @@ function Results() {
   const podiumOrder = [top3[1], top3[0], top3[2]].filter(Boolean);
   const heights = ["h-32", "h-44", "h-24"];
   const places = [2, 1, 3];
+  const medals = ["🥈", "🥇", "🥉"];
 
   return (
     <main className="min-h-screen px-6 py-8 max-w-3xl mx-auto">
-      <div className="text-center mb-8">
+      <div className="text-center mb-8 animate-bounce-in">
         <p className="uppercase tracking-widest text-xs text-muted-foreground font-bold">Final results</p>
         <h1 className="text-4xl sm:text-5xl font-black mt-2">{title}</h1>
       </div>
 
       {/* Podium */}
       <div className="grid grid-cols-3 gap-3 items-end mb-8">
-        {podiumOrder.map((p, i) => (
-          <div key={p.id} className="flex flex-col items-center">
-            <div
-              className={`w-full rounded-t-2xl ${heights[i]} grid place-items-center text-center px-2`}
-              style={{ backgroundImage: "var(--gradient-card)", border: "1px solid var(--color-border)" }}
-            >
-              <div>
-                <div className="text-2xl">{["🥈", "🥇", "🥉"][i]}</div>
-                <div className="font-extrabold truncate max-w-[10rem]">{p.name}</div>
-                <div className="font-mono text-sm text-muted-foreground">{p.score} pts</div>
+        {podiumOrder.map((p, i) => {
+          const av = getAvatar(p.avatar);
+          return (
+            <div key={p.id} className="flex flex-col items-center animate-pop-up" style={{ animationDelay: `${i * 200}ms` }}>
+              <div className="text-5xl mb-2">{av.emoji}</div>
+              <div
+                className={`w-full rounded-t-2xl ${heights[i]} grid place-items-center text-center px-2`}
+                style={{ backgroundImage: "var(--gradient-card)", border: "1px solid var(--color-border)" }}
+              >
+                <div>
+                  <div className="text-3xl">{medals[i]}</div>
+                  <div className="font-extrabold truncate max-w-[10rem]">{p.name}</div>
+                  <div className="font-mono text-sm text-muted-foreground">{p.score} pts</div>
+                </div>
+              </div>
+              <div className="w-full text-center font-black py-2 bg-primary text-primary-foreground rounded-b-xl">
+                {places[i]}
               </div>
             </div>
-            <div className="w-full text-center font-black py-2 bg-primary text-primary-foreground rounded-b-xl">
-              {places[i]}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {rest.length > 0 && (
-        <ol className="space-y-2 mb-8">
-          {rest.map((p, i) => (
-            <li
-              key={p.id}
-              className={`flex items-center gap-3 rounded-xl px-4 py-3 border border-border ${
-                p.isYou ? "bg-primary/20" : "bg-card/60"
-              }`}
-            >
-              <span className="font-black w-6 text-muted-foreground">{i + 4}</span>
-              <span className="flex-1 font-bold">{p.name}{p.isYou && " (you)"}</span>
-              <span className="font-mono font-bold">{p.score}</span>
-            </li>
-          ))}
+        <ol className="space-y-2">
+          {rest.map((p, i) => {
+            const av = getAvatar(p.avatar);
+            return (
+              <li
+                key={p.id}
+                className={`flex items-center gap-3 rounded-xl px-4 py-3 border border-border ${
+                  p.isYou ? "bg-primary/30" : "bg-card/60"
+                }`}
+              >
+                <span className="font-black w-6 text-muted-foreground">{i + 4}</span>
+                <span className="text-2xl">{av.emoji}</span>
+                <span className="flex-1 font-bold">{p.name}{p.isYou && " (you)"}</span>
+                <span className="font-mono font-bold">{p.score}</span>
+              </li>
+            );
+          })}
         </ol>
       )}
-
-      <div className="flex gap-3">
-        <Link
-          to="/"
-          onClick={() => clearSession()}
-          className="flex-1 text-center btn-pop btn-pop-active rounded-xl bg-primary text-primary-foreground font-extrabold py-4 hover:brightness-110"
-        >
-          Play again
-        </Link>
-      </div>
     </main>
   );
 }
