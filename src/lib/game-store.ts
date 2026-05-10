@@ -39,6 +39,7 @@ type RoomState = {
 
 const VIEWER_KEY = "kahootlike:viewer-session";
 const ROOM_PREFIX = "kahootlike:room:";
+const MAX_PLAYERS = 10;
 
 export function loadSession(): GameSession | null {
   if (typeof window === "undefined") return null;
@@ -128,6 +129,12 @@ export function joinGame(pin: string, nickname: string, avatar: string): { quiz:
 
   const viewer = loadViewerSession();
   const playerId = viewer?.pin === quiz.pin ? viewer.playerId : `player-${Date.now()}`;
+  const isRejoining = room.players.some((player) => player.id === playerId);
+
+  // Check player limit (allow rejoining)
+  if (!isRejoining && room.players.length >= MAX_PLAYERS) {
+    return { error: `Game is full. Maximum ${MAX_PLAYERS} players allowed.` };
+  }
   const sessionPlayer: Player = {
     id: playerId,
     name: nickname.trim(),

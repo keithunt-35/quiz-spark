@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { createCustomGame } from "@/lib/game-store";
+import { generateQuizQuestions, isElevenLabsConfigured } from "@/lib/elevenlabs-agent";
 
 export const Route = createFileRoute("/create")({
   head: () => ({
@@ -30,6 +31,10 @@ const OPTION_COLORS = [
 function CreateGame() {
   const navigate = useNavigate();
   const [gameTitle, setGameTitle] = useState("");
+  const [creationMode, setCreationMode] = useState<"manual" | "ai">("manual");
+  const [aiTopic, setAiTopic] = useState("");
+  const [aiQuestionCount, setAiQuestionCount] = useState(5);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([
     {
       id: "q1",
@@ -106,6 +111,45 @@ function CreateGame() {
     navigate({ to: "/lobby" });
   }
 
+  async function handleGenerateWithAI() {
+    setError(null);
+    
+    if (!aiTopic.trim()) {
+      setError("Please enter a topic for AI generation");
+      return;
+    }
+
+    if (!isElevenLabsConfigured()) {
+      setError("ElevenLabs API key not configured. Please set VITE_ELEVENLABS_API_KEY.");
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      const response = await generateQuizQuestions({
+        topic: aiTopic,
+        numberOfQuestions: aiQuestionCount,
+      });
+      
+      const typedQuestions: Question[] = response.questions.map((q, i) => ({
+        id: q.id,
+        prompt: q.prompt,
+        options: [q.options[0], q.options[1], q.options[2], q.options[3]] as [string, string, string, string],
+        correctIndex: q.correctIndex as 0 | 1 | 2 | 3,
+        timeLimit: q.timeLimit,
+      }));
+      
+      setQuestions(typedQuestions);
+      setEditingIndex(0);
+      setCreationMode("manual"); // Switch to manual mode to review/edit
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to generate questions");
+    } finally {
+      setIsGenerating(false);
+    }
+  }
+
   return (
     <main className="min-h-screen flex flex-col bg-gradient-to-b from-background to-background/50">
       <header className="px-6 py-5 flex items-center justify-between border-b border-border">
@@ -138,7 +182,79 @@ function CreateGame() {
             <p className="text-xs text-muted-foreground">{gameTitle.length}/50 characters</p>
           </div>
 
+          {/* Creation Mode Toggle */}
+          <div className="space-y-3">
+            <label className="block text-sm font-semibold">Question Creation Mode</label>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setCreationMode("manual")}
+                className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${
+                  creationMode === "manual"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-card border border-border hover:bg-card/80"
+                }`}
+              >
+                ✏️ Manual Entry
+              </button>
+              <button
+                onClick={() => setCreationMode("ai")}
+                className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${
+                  creationMode === "ai"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-card border border-border hover:bg-card/80"
+                }`}
+              >
+                🤖 AI Generate
+              </button>
+            </div>
+          </div>
+
+          {/* AI Generation Panel */}
+          {creationMode === "ai" && (
+            <div className="rounded-2xl border border-border p-6 space-y-4 bg-gradient-to-br from-purple-500/10 to-blue-500/10">
+              <h3 className="text-lg font-extrabold">Generate Questions with AI</h3>
+              <div className="space-y-3">
+                <div>
+                  <label htmlFor="aiTopic" className="block text-sm font-semibold mb-2">
+                    Topic
+                  </label>
+                  <input
+                    id="aiTopic"
+                    value={aiTopic}
+                    onChange={(e) => setAiTopic(e.target.value)}
+                    placeholder="e.g. Science, History, Technology"
+                    className="w-full bg-input text-foreground rounded-lg py-2 px-3 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    disabled={isGenerating}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="aiCount" className="block text-sm font-semibold mb-2">
+                    Number of Questions: {aiQuestionCount}
+                  </label>
+                  <input
+                    id="aiCount"
+                    type="range"
+                    min="3"
+                    max="10"
+                    value={aiQuestionCount}
+                    onChange={(e) => setAiQuestionCount(parseInt(e.target.value))}
+                    className="w-full"
+                    disabled={isGenerating}
+                  />
+                </div>
+                <button
+                  onClick={handleGenerateWithAI}
+                  disabled={isGenerating || !aiTopic.trim()}
+                  className="w-full py-3 px-4 rounded-lg bg-gradient-to-r from-purple-500 to-blue-500 text-white font-extrabold hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                >
+                  {isGenerating ? "Generating..." : "✨ Generate Questions"}
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Questions List & Editor */}
+          {creationMode === "manual" && (
           <div className="grid lg:grid-cols-3 gap-6">
             {/* Questions Sidebar */}
             <div className="lg:col-span-1 space-y-2">
@@ -269,6 +385,7 @@ function CreateGame() {
               </div>
             </div>
           </div>
+          )}
         </div>
       </section>
     </main>

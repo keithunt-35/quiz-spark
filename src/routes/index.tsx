@@ -67,7 +67,7 @@ function Home() {
 
             {/* Join a Game Card */}
             <button
-              onClick={() => navigate({ to: "/join" })}
+              onClick={() => navigate({ to: "/join", search: { pin: "" } })}
               className="group rounded-3xl p-8 border border-border overflow-hidden transition-all hover:border-primary hover:shadow-xl"
               style={{ backgroundImage: "var(--gradient-card)", boxShadow: "var(--shadow-glow)" }}
             >
