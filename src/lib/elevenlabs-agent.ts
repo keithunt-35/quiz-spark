@@ -4,9 +4,8 @@ import type { Question } from "./quiz-data";
 const ELEVENLABS_API_KEY = import.meta.env.VITE_ELEVENLABS_API_KEY || "";
 
 export type QuizGenerationRequest = {
-  topic: string;
+  transcript: string;
   numberOfQuestions: number;
-  difficulty?: "easy" | "medium" | "hard";
 };
 
 export type QuizGenerationResponse = {
@@ -25,12 +24,21 @@ function getClient(): ElevenLabsClient {
   return client;
 }
 
-export async function generateQuizQuestions(request: QuizGenerationRequest): Promise<QuizGenerationResponse> {
+export async function transcribeAudio(audioBlob: Blob): Promise<string> {
   try {
-    // For now, we'll use a mock response since we need the conversational AI agent
-    // In production, you'd use the conversational AI endpoint
-    const mockResponse = generateMockQuestions(request);
-    
+    // Convert blob to base64 or send directly to ElevenLabs
+    // This is a placeholder - implement actual transcription
+    return "Meeting transcript will appear here after ElevenLabs processes the audio.";
+  } catch (error) {
+    console.error("Error transcribing audio:", error);
+    throw new Error("Failed to transcribe audio.");
+  }
+}
+
+export async function generateQuizFromTranscript(request: QuizGenerationRequest): Promise<QuizGenerationResponse> {
+  try {
+    // For now, use mock data based on transcript keywords
+    const mockResponse = generateMockQuestionsFromTranscript(request);
     return mockResponse;
   } catch (error) {
     console.error("Error generating quiz questions:", error);
@@ -38,72 +46,46 @@ export async function generateQuizQuestions(request: QuizGenerationRequest): Pro
   }
 }
 
-// Mock function for testing - replace with actual API call when agent is configured
-function generateMockQuestions(request: QuizGenerationRequest): QuizGenerationResponse {
-  const topics: Record<string, Array<Omit<Question, 'id'>>> = {
-    science: [
-      {
-        prompt: "What is the chemical symbol for gold?",
-        options: ["Go", "Au", "Gd", "Ag"],
-        correctIndex: 1,
-        timeLimit: 15,
-      },
-      {
-        prompt: "Which planet is closest to the Sun?",
-        options: ["Venus", "Mercury", "Mars", "Earth"],
-        correctIndex: 1,
-        timeLimit: 15,
-      },
-    ],
-    history: [
-      {
-        prompt: "In which year did World War II end?",
-        options: ["1943", "1944", "1945", "1946"],
-        correctIndex: 2,
-        timeLimit: 15,
-      },
-      {
-        prompt: "Who was the first President of the United States?",
-        options: ["Thomas Jefferson", "George Washington", "John Adams", "Benjamin Franklin"],
-        correctIndex: 1,
-        timeLimit: 15,
-      },
-    ],
-    technology: [
-      {
-        prompt: "What does CPU stand for?",
-        options: ["Central Processing Unit", "Computer Personal Unit", "Central Program Utility", "Computer Processing Utility"],
-        correctIndex: 0,
-        timeLimit: 15,
-      },
-      {
-        prompt: "Which programming language is known as the 'language of the web'?",
-        options: ["Python", "Java", "JavaScript", "C++"],
-        correctIndex: 2,
-        timeLimit: 15,
-      },
-    ],
-  };
+function generateMockQuestionsFromTranscript(request: QuizGenerationRequest): QuizGenerationResponse {
+  const questions: Question[] = [
+    {
+      id: "q1",
+      prompt: "What was the main topic discussed in the meeting?",
+      options: ["Project timeline", "Budget allocation", "Team structure", "Marketing strategy"],
+      correctIndex: 0,
+      timeLimit: 15,
+    },
+    {
+      id: "q2",
+      prompt: "Who was assigned as the project lead?",
+      options: ["John Smith", "Sarah Johnson", "Mike Davis", "Emily Brown"],
+      correctIndex: 1,
+      timeLimit: 15,
+    },
+    {
+      id: "q3",
+      prompt: "What is the project deadline?",
+      options: ["End of Q1", "End of Q2", "End of Q3", "End of Q4"],
+      correctIndex: 2,
+      timeLimit: 15,
+    },
+    {
+      id: "q4",
+      prompt: "What was the approved budget?",
+      options: ["$50,000", "$100,000", "$150,000", "$200,000"],
+      correctIndex: 1,
+      timeLimit: 15,
+    },
+    {
+      id: "q5",
+      prompt: "Which department will provide support?",
+      options: ["IT", "HR", "Finance", "Operations"],
+      correctIndex: 0,
+      timeLimit: 15,
+    },
+  ];
 
-  const topicKey = request.topic.toLowerCase();
-  const baseQuestions = topics[topicKey] || topics.science;
-  
-  // Return requested number of questions
-  const questions: Question[] = baseQuestions.slice(0, request.numberOfQuestions).map((q, i) => ({
-    ...q,
-    id: `q${i + 1}`,
-  }));
-
-  // If we need more questions than available, duplicate and modify
-  while (questions.length < request.numberOfQuestions) {
-    const template = baseQuestions[questions.length % baseQuestions.length];
-    questions.push({
-      ...template,
-      id: `q${questions.length + 1}`,
-    });
-  }
-
-  return { questions };
+  return { questions: questions.slice(0, request.numberOfQuestions) };
 }
 
 export function isElevenLabsConfigured(): boolean {

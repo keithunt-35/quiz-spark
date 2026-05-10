@@ -1,12 +1,12 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { createCustomGame } from "@/lib/game-store";
-import { generateQuizQuestions, isElevenLabsConfigured } from "@/lib/elevenlabs-agent";
+import { createPrizePool } from "@/lib/solana-staking";
 
 export const Route = createFileRoute("/create")({
   head: () => ({
     meta: [
-      { title: "Create a Game — QuizBlast" },
+      { title: "Create a Game — QuizSpark" },
       { name: "description", content: "Create a live quiz and challenge your friends." },
     ],
   }),
@@ -31,10 +31,7 @@ const OPTION_COLORS = [
 function CreateGame() {
   const navigate = useNavigate();
   const [gameTitle, setGameTitle] = useState("");
-  const [creationMode, setCreationMode] = useState<"manual" | "ai">("manual");
-  const [aiTopic, setAiTopic] = useState("");
-  const [aiQuestionCount, setAiQuestionCount] = useState(5);
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [hostStake, setHostStake] = useState(0.5);
   const [questions, setQuestions] = useState<Question[]>([
     {
       id: "q1",
@@ -81,7 +78,6 @@ function CreateGame() {
   function handleCreateGame() {
     setError(null);
 
-    // Validation
     if (!gameTitle.trim()) {
       setError("Please enter a game title");
       return;
@@ -108,56 +104,17 @@ function CreateGame() {
       return;
     }
 
+    // Create prize pool
+    createPrizePool(result.quiz.pin, hostStake);
+
     navigate({ to: "/lobby" });
-  }
-
-  async function handleGenerateWithAI() {
-    setError(null);
-    
-    if (!aiTopic.trim()) {
-      setError("Please enter a topic for AI generation");
-      return;
-    }
-
-    if (!isElevenLabsConfigured()) {
-      setError("ElevenLabs API key not configured. Please set VITE_ELEVENLABS_API_KEY.");
-      return;
-    }
-
-    setIsGenerating(true);
-    try {
-      const response = await generateQuizQuestions({
-        topic: aiTopic,
-        numberOfQuestions: aiQuestionCount,
-      });
-      
-      const typedQuestions: Question[] = response.questions.map((q, i) => ({
-        id: q.id,
-        prompt: q.prompt,
-        options: [q.options[0], q.options[1], q.options[2], q.options[3]] as [string, string, string, string],
-        correctIndex: q.correctIndex as 0 | 1 | 2 | 3,
-        timeLimit: q.timeLimit,
-      }));
-      
-      setQuestions(typedQuestions);
-      setEditingIndex(0);
-      setCreationMode("manual"); // Switch to manual mode to review/edit
-      setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to generate questions");
-    } finally {
-      setIsGenerating(false);
-    }
   }
 
   return (
     <main className="min-h-screen flex flex-col bg-gradient-to-b from-background to-background/50">
       <header className="px-6 py-5 flex items-center justify-between border-b border-border">
         <Link to="/" className="flex items-center gap-2">
-          <div className="size-9 rounded-xl bg-primary text-primary-foreground grid place-items-center font-black shadow-[var(--shadow-pop)]">
-            Q!
-          </div>
-          <span className="font-extrabold text-xl tracking-tight">QuizBlast</span>
+          <img src="/quizspark-logo.svg" alt="QuizSpark" className="h-12" />
         </Link>
         <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
           ← Back

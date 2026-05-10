@@ -5,7 +5,7 @@ import { loadSession, clearSession } from "@/lib/game-store";
 import { getAvatar } from "@/lib/avatars";
 
 export const Route = createFileRoute("/lobby")({
-  head: () => ({ meta: [{ title: "Lobby — QuizBlast" }] }),
+  head: () => ({ meta: [{ title: "Lobby — QuizSpark" }] }),
   component: Lobby,
 });
 

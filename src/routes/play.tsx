@@ -5,7 +5,7 @@ import { findQuizByPin } from "@/lib/quiz-data";
 import { getAvatar } from "@/lib/avatars";
 
 export const Route = createFileRoute("/play")({
-  head: () => ({ meta: [{ title: "Playing — QuizBlast" }] }),
+  head: () => ({ meta: [{ title: "Playing — QuizSpark" }] }),
   component: Play,
 });
 

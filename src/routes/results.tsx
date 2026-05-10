@@ -4,7 +4,7 @@ import { loadSession, type Player } from "@/lib/game-store";
 import { getAvatar } from "@/lib/avatars";
 
 export const Route = createFileRoute("/results")({
-  head: () => ({ meta: [{ title: "Results — QuizBlast" }] }),
+  head: () => ({ meta: [{ title: "Results — QuizSpark" }] }),
   component: Results,
 });
 

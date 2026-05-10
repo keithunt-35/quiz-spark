@@ -6,7 +6,7 @@ import { AVATARS } from "@/lib/avatars";
 export const Route = createFileRoute("/join")({
   head: () => ({
     meta: [
-      { title: "Join a Game — QuizBlast" },
+      { title: "Join a Game — QuizSpark" },
       { name: "description", content: "Enter a game PIN and join a live quiz." },
     ],
   }),
@@ -45,10 +45,7 @@ function JoinGame() {
     <main className="min-h-screen flex flex-col">
       <header className="px-6 py-5 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <div className="size-9 rounded-xl bg-primary text-primary-foreground grid place-items-center font-black shadow-[var(--shadow-pop)]">
-            Q!
-          </div>
-          <span className="font-extrabold text-xl tracking-tight">QuizBlast</span>
+          <img src="/quizspark-logo.svg" alt="QuizSpark" className="h-12" />
         </Link>
         <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
           ← Back

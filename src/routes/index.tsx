@@ -3,9 +3,9 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "QuizBlast — Live Multiplayer Quiz" },
+      { title: "QuizSpark — Live Multiplayer Quiz" },
       { name: "description", content: "Create or join a live quiz. Answer fast, climb the leaderboard." },
-      { property: "og:title", content: "QuizBlast — Live Multiplayer Quiz" },
+      { property: "og:title", content: "QuizSpark — Live Multiplayer Quiz" },
       { property: "og:description", content: "Create or join a live quiz." },
     ],
   }),
@@ -19,10 +19,7 @@ function Home() {
     <main className="min-h-screen flex flex-col">
       <header className="px-6 py-5 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <div className="size-9 rounded-xl bg-primary text-primary-foreground grid place-items-center font-black shadow-[var(--shadow-pop)]">
-            Q!
-          </div>
-          <span className="font-extrabold text-xl tracking-tight">QuizBlast</span>
+          <img src="/quizspark-logo.svg" alt="QuizSpark" className="h-12" />
         </Link>
       </header>
 

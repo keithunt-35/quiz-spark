@@ -1,0 +1,52 @@
+<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" width="500" height="500">
+
+  <!-- Kahoot deep purple background -->
+  <rect width="500" height="500" rx="80" fill="#46178F"/>
+
+  <!-- Ambient energy dots -->
+  <circle cx="68"  cy="72"  r="9" fill="#FFD602" opacity="0.42"/>
+  <circle cx="432" cy="62"  r="6" fill="#FFFFFF" opacity="0.28"/>
+  <circle cx="455" cy="192" r="4" fill="#FFD602" opacity="0.32"/>
+  <circle cx="52"  cy="316" r="6" fill="#FFFFFF" opacity="0.18"/>
+  <circle cx="445" cy="405" r="8" fill="#FFD602" opacity="0.26"/>
+  <circle cx="74"  cy="440" r="4" fill="#FFFFFF" opacity="0.16"/>
+  <circle cx="462" cy="460" r="5" fill="#FFD602" opacity="0.18"/>
+  <circle cx="40"  cy="150" r="3" fill="#FFD602" opacity="0.24"/>
+  <circle cx="470" cy="108" r="3" fill="#FFFFFF" opacity="0.20"/>
+  <circle cx="38"  cy="390" r="4" fill="#FFD602" opacity="0.20"/>
+
+  <!-- Speech bubble body -->
+  <rect x="78" y="48" width="344" height="244" rx="38" fill="#FFFFFF"/>
+  <!-- Speech bubble tail (bottom-left) -->
+  <polygon points="100,286 174,286 108,354" fill="#FFFFFF"/>
+
+  <!-- Lightning bolt — Kahoot yellow -->
+  <polygon
+    points="278,84  206,180  252,180  219,262  298,167  252,167"
+    fill="#FFD602"
+  />
+
+  <!-- Sparkle cross near bolt tip (top-right of bubble) -->
+  <line x1="325" y1="88"  x2="355" y2="88"  stroke="#FFD602" stroke-width="3"   stroke-linecap="round" opacity="0.52"/>
+  <line x1="340" y1="73"  x2="340" y2="103" stroke="#FFD602" stroke-width="3"   stroke-linecap="round" opacity="0.52"/>
+
+  <!-- Small sparkle (bottom-left of bubble) -->
+  <line x1="155" y1="237" x2="173" y2="237" stroke="#FFD602" stroke-width="2.2" stroke-linecap="round" opacity="0.42"/>
+  <line x1="164" y1="228" x2="164" y2="246" stroke="#FFD602" stroke-width="2.2" stroke-linecap="round" opacity="0.42"/>
+
+  <!-- Accent dot cluster near bolt -->
+  <circle cx="315" cy="112" r="5" fill="#FFD602" opacity="0.55"/>
+  <circle cx="330" cy="138" r="3" fill="#FFD602" opacity="0.40"/>
+  <circle cx="183" cy="233" r="4" fill="#FFD602" opacity="0.44"/>
+
+  <!-- Wordmark: "Quiz" white · "Spark" yellow -->
+  <text x="247" y="436"
+    font-family="'Arial Black', Impact, Arial, sans-serif"
+    font-size="57" font-weight="900"
+    fill="#FFFFFF" text-anchor="end" letter-spacing="-1">Quiz</text>
+  <text x="253" y="436"
+    font-family="'Arial Black', Impact, Arial, sans-serif"
+    font-size="57" font-weight="900"
+    fill="#FFD602" text-anchor="start" letter-spacing="-1">Spark</text>
+
+</svg>

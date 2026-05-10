@@ -1,4 +1,4 @@
-# QuizBlast - ElevenLabs Integration Setup
+# QuizSpark - ElevenLabs Integration Setup
 
 ## Phase 1 Complete ✅
 

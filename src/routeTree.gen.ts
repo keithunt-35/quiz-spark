@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ResultsRouteImport } from './routes/results'
+import { Route as RecordMeetingRouteImport } from './routes/record-meeting'
 import { Route as PlayRouteImport } from './routes/play'
 import { Route as LobbyRouteImport } from './routes/lobby'
 import { Route as JoinRouteImport } from './routes/join'
@@ -19,6 +20,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const ResultsRoute = ResultsRouteImport.update({
   id: '/results',
   path: '/results',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecordMeetingRoute = RecordMeetingRouteImport.update({
+  id: '/record-meeting',
+  path: '/record-meeting',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlayRoute = PlayRouteImport.update({
@@ -53,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/join': typeof JoinRoute
   '/lobby': typeof LobbyRoute
   '/play': typeof PlayRoute
+  '/record-meeting': typeof RecordMeetingRoute
   '/results': typeof ResultsRoute
 }
 export interface FileRoutesByTo {
@@ -61,6 +68,7 @@ export interface FileRoutesByTo {
   '/join': typeof JoinRoute
   '/lobby': typeof LobbyRoute
   '/play': typeof PlayRoute
+  '/record-meeting': typeof RecordMeetingRoute
   '/results': typeof ResultsRoute
 }
 export interface FileRoutesById {
@@ -70,14 +78,37 @@ export interface FileRoutesById {
   '/join': typeof JoinRoute
   '/lobby': typeof LobbyRoute
   '/play': typeof PlayRoute
+  '/record-meeting': typeof RecordMeetingRoute
   '/results': typeof ResultsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/create' | '/join' | '/lobby' | '/play' | '/results'
+  fullPaths:
+    | '/'
+    | '/create'
+    | '/join'
+    | '/lobby'
+    | '/play'
+    | '/record-meeting'
+    | '/results'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/create' | '/join' | '/lobby' | '/play' | '/results'
-  id: '__root__' | '/' | '/create' | '/join' | '/lobby' | '/play' | '/results'
+  to:
+    | '/'
+    | '/create'
+    | '/join'
+    | '/lobby'
+    | '/play'
+    | '/record-meeting'
+    | '/results'
+  id:
+    | '__root__'
+    | '/'
+    | '/create'
+    | '/join'
+    | '/lobby'
+    | '/play'
+    | '/record-meeting'
+    | '/results'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -86,6 +117,7 @@ export interface RootRouteChildren {
   JoinRoute: typeof JoinRoute
   LobbyRoute: typeof LobbyRoute
   PlayRoute: typeof PlayRoute
+  RecordMeetingRoute: typeof RecordMeetingRoute
   ResultsRoute: typeof ResultsRoute
 }
 
@@ -96,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/results'
       fullPath: '/results'
       preLoaderRoute: typeof ResultsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/record-meeting': {
+      id: '/record-meeting'
+      path: '/record-meeting'
+      fullPath: '/record-meeting'
+      preLoaderRoute: typeof RecordMeetingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/play': {
@@ -142,6 +181,7 @@ const rootRouteChildren: RootRouteChildren = {
   JoinRoute: JoinRoute,
   LobbyRoute: LobbyRoute,
   PlayRoute: PlayRoute,
+  RecordMeetingRoute: RecordMeetingRoute,
   ResultsRoute: ResultsRoute,
 }
 export const routeTree = rootRouteImport

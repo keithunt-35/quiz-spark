@@ -1,0 +1,118 @@
+<svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg" width="1200" height="400">
+
+  <!-- Kahoot deep purple background -->
+  <rect width="1200" height="400" fill="#46178F"/>
+
+  <!-- Huge faint background "?" for quiz atmosphere -->
+  <text x="940" y="405"
+    font-family="'Arial Black', Impact, Arial, sans-serif"
+    font-size="420" fill="#FFFFFF" opacity="0.030">?</text>
+
+  <!-- Ambient scattered dots -->
+  <circle cx="28"   cy="28"  r="8" fill="#FFD602" opacity="0.42"/>
+  <circle cx="1172" cy="30"  r="6" fill="#FFFFFF" opacity="0.28"/>
+  <circle cx="1178" cy="372" r="9" fill="#FFD602" opacity="0.28"/>
+  <circle cx="20"   cy="376" r="5" fill="#FFFFFF" opacity="0.20"/>
+  <circle cx="326"  cy="16"  r="5" fill="#FFD602" opacity="0.32"/>
+  <circle cx="350"  cy="388" r="4" fill="#FFFFFF" opacity="0.22"/>
+  <circle cx="1102" cy="198" r="6" fill="#FFD602" opacity="0.20"/>
+  <circle cx="822"  cy="18"  r="4" fill="#FFFFFF" opacity="0.18"/>
+  <circle cx="842"  cy="386" r="5" fill="#FFD602" opacity="0.16"/>
+  <circle cx="188"  cy="20"  r="4" fill="#FFFFFF" opacity="0.18"/>
+
+  <!-- Bridge dots (icon zone → text zone) -->
+  <circle cx="308" cy="142" r="4" fill="#FFD602" opacity="0.40"/>
+  <circle cx="322" cy="200" r="5" fill="#FFFFFF" opacity="0.28"/>
+  <circle cx="310" cy="262" r="3" fill="#FFD602" opacity="0.28"/>
+
+  <!-- Kahoot answer-shape silhouettes (top-right, very faint) -->
+  <!-- Circle -->
+  <circle cx="952" cy="86" r="52"
+    fill="none" stroke="#FFFFFF" stroke-width="4" opacity="0.07"/>
+  <!-- Triangle -->
+  <polygon points="1062,26 1006,122 1118,122"
+    fill="none" stroke="#FFFFFF" stroke-width="4" opacity="0.06"/>
+  <!-- Diamond (rotated square) -->
+  <rect x="1108" y="162" width="64" height="64" rx="5"
+    transform="rotate(45 1140 194)"
+    fill="none" stroke="#FFD602" stroke-width="4" opacity="0.07"/>
+  <!-- Square -->
+  <rect x="938" y="248" width="82" height="82" rx="8"
+    fill="none" stroke="#FFFFFF" stroke-width="4" opacity="0.06"/>
+
+  <!-- ── ICON MARK ── -->
+
+  <!-- Speech bubble body -->
+  <rect x="45" y="70" width="248" height="184" rx="28" fill="#FFFFFF"/>
+  <!-- Bubble tail -->
+  <polygon points="70,250 140,250 78,308" fill="#FFFFFF"/>
+
+  <!-- Lightning bolt -->
+  <polygon
+    points="194,98  132,166  170,166  148,234  210,155  170,155"
+    fill="#FFD602"
+  />
+
+  <!-- Sparkle cross near bolt top -->
+  <line x1="214" y1="104" x2="232" y2="104" stroke="#FFD602" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
+  <line x1="223" y1="95"  x2="223" y2="113" stroke="#FFD602" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
+  <!-- Sparkle cross near bolt bottom-left -->
+  <line x1="110" y1="222" x2="124" y2="222" stroke="#FFD602" stroke-width="2"   stroke-linecap="round" opacity="0.42"/>
+  <line x1="117" y1="215" x2="117" y2="229" stroke="#FFD602" stroke-width="2"   stroke-linecap="round" opacity="0.42"/>
+
+  <!-- Bolt accent dots -->
+  <circle cx="215" cy="112" r="4" fill="#FFD602" opacity="0.58"/>
+  <circle cx="228" cy="134" r="3" fill="#FFD602" opacity="0.42"/>
+
+  <!-- ── MAIN WORDMARK ── -->
+  <!-- "Quiz" white (text-anchor end → right edge at x=578) -->
+  <text x="578" y="218"
+    font-family="'Arial Black', Impact, Arial, sans-serif"
+    font-size="92" font-weight="900"
+    fill="#FFFFFF" text-anchor="end" letter-spacing="-2">Quiz</text>
+  <!-- "Spark" yellow (text-anchor start → left edge at x=582) -->
+  <text x="582" y="218"
+    font-family="'Arial Black', Impact, Arial, sans-serif"
+    font-size="92" font-weight="900"
+    fill="#FFD602" text-anchor="start" letter-spacing="-2">Spark</text>
+
+  <!-- Tagline -->
+  <text x="362" y="258"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="20" fill="#FFFFFF" opacity="0.76">
+    Turn live meetings into AI-powered multiplayer quiz battles
+  </text>
+
+  <!-- Separator line -->
+  <line x1="362" y1="276" x2="870" y2="276"
+    stroke="#FFFFFF" stroke-width="0.75" opacity="0.20"/>
+
+  <!-- Feature badge pills -->
+  <rect x="362" y="288" width="148" height="30" rx="15" fill="#FFFFFF" opacity="0.13"/>
+  <text x="436" y="307"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="middle">ElevenLabs AI</text>
+
+  <rect x="520" y="288" width="114" height="30" rx="15" fill="#FFD602" opacity="0.20"/>
+  <text x="577" y="307"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="13" font-weight="700" fill="#FFD602" text-anchor="middle">Multiplayer</text>
+
+  <rect x="644" y="288" width="120" height="30" rx="15" fill="#FFFFFF" opacity="0.13"/>
+  <text x="704" y="307"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="middle">Real-Time Quiz</text>
+
+  <rect x="774" y="288" width="136" height="30" rx="15" fill="#FFFFFF" opacity="0.13"/>
+  <text x="842" y="307"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="middle">Live Leaderboard</text>
+
+  <!-- Bottom-right credit -->
+  <text x="1178" y="390"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="11" fill="#FFFFFF" opacity="0.28" text-anchor="end">
+    QuizSpark · Hackathon 2025
+  </text>
+
+</svg>

@@ -1,6 +1,6 @@
-# QuizBlast
+# QuizSpark
 
-QuizBlast is a Kahoot-style live quiz demo built with TanStack Start + React + Vite.
+QuizSpark is a Kahoot-style live quiz demo built with TanStack Start + React + Vite.
 
 This README shows how to run the project locally and includes placeholders for screenshots that demonstrate the main flows (Host lobby, Player join, and Play view).
 
