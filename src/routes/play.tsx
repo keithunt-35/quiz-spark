@@ -36,6 +36,16 @@ function Play() {
     }
   }, [session, quiz, navigate]);
 
+  useEffect(() => {
+    function syncSession() {
+      const next = loadSession();
+      if (next) setSession(next);
+    }
+
+    window.addEventListener("storage", syncSession);
+    return () => window.removeEventListener("storage", syncSession);
+  }, []);
+
   // Reset on question change
   useEffect(() => {
     if (!question) return;

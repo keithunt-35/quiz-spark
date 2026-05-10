@@ -12,6 +12,8 @@ export type Quiz = {
   questions: Question[];
 };
 
+const CUSTOM_QUIZZES_KEY = "kahootlike:custom-quizzes";
+
 export const DEMO_QUIZZES: Quiz[] = [
   {
     pin: "123456",
@@ -95,17 +97,38 @@ export const DEMO_QUIZZES: Quiz[] = [
   },
 ];
 
-// In-memory store for custom quizzes (would be a database in production)
-const customQuizzes: Map<string, Quiz> = new Map();
+function readCustomQuizzes(): Map<string, Quiz> {
+  if (typeof window === "undefined") return new Map();
 
-export function findQuizByPin(pin: string): Quiz | undefined {
-  const cleaned = pin.trim();
-  // Check custom quizzes first, then demo quizzes
+  const raw = localStorage.getItem(CUSTOM_QUIZZES_KEY);
+  if (!raw) return new Map();
+
+  try {
+    const quizzes = JSON.parse(raw) as Quiz[];
+    return new Map(quizzes.map((quiz) => [quiz.pin, quiz]));
+  } catch {
+    return new Map();
+  }
+}
+
+function writeCustomQuizzes(quizzes: Map<string, Quiz>) {
+  if (typeof window === "undefined") return;
+
+  localStorage.setItem(CUSTOM_QUIZZES_KEY, JSON.stringify(Array.from(quizzes.values())));
+}
+
+export function findQuizByPin(pin: string | number | null | undefined): Quiz | undefined {
+  const cleaned = String(pin ?? "").trim();
+  const customQuizzes = readCustomQuizzes();
+
+  // Check custom quizzes first, then demo quizzes.
   return customQuizzes.get(cleaned) || DEMO_QUIZZES.find((q) => q.pin === cleaned);
 }
 
 export function storeCustomQuiz(quiz: Quiz) {
+  const customQuizzes = readCustomQuizzes();
   customQuizzes.set(quiz.pin, quiz);
+  writeCustomQuizzes(customQuizzes);
 }
 
 export const BOT_NAMES = [

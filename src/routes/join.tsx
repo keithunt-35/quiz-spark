@@ -11,7 +11,7 @@ export const Route = createFileRoute("/join")({
     ],
   }),
   validateSearch: (search: Record<string, unknown>) => ({
-    pin: (search.pin as string) || "",
+    pin: typeof search.pin === "string" || typeof search.pin === "number" ? String(search.pin) : "",
   }),
   component: JoinGame,
 });

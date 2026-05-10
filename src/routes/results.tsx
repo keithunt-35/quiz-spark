@@ -23,6 +23,19 @@ function Results() {
     setTitle(s.quizTitle);
   }, [navigate]);
 
+  useEffect(() => {
+    function syncSession() {
+      const next = loadSession();
+      if (next) {
+        setPlayers([...next.players].sort((a, b) => b.score - a.score));
+        setTitle(next.quizTitle);
+      }
+    }
+
+    window.addEventListener("storage", syncSession);
+    return () => window.removeEventListener("storage", syncSession);
+  }, []);
+
   if (!players) return null;
   const top3 = players.slice(0, 3);
   const rest = players.slice(3);

@@ -24,6 +24,16 @@ function Lobby() {
   }, [navigate]);
 
   useEffect(() => {
+    function syncSession() {
+      const next = loadSession();
+      if (next) setSession(next);
+    }
+
+    window.addEventListener("storage", syncSession);
+    return () => window.removeEventListener("storage", syncSession);
+  }, []);
+
+  useEffect(() => {
     if (countdown === null) return;
     if (countdown === 0) {
       navigate({ to: "/play" });
